@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { SESSION_DURATION } = require("../config/env");
 const { generateNewShortId } = require("../utils/uniqueIdHandler");
 
 const textSchema = new mongoose.Schema(
@@ -32,7 +33,7 @@ const bucketSchema = new mongoose.Schema(
     expiresAfter: {
       // seconds
       type: Number,
-      default: 6 * 3600,
+      default: SESSION_DURATION,
       requried: true, // 6 hrs
     },
     textList: [textSchema],
