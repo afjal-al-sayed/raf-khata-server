@@ -1,6 +1,7 @@
 const Bucket = require("../models/bucketModel");
 const { getBucketById } = require("../services/bucketService");
 const { createNewText } = require("../services/textService");
+const { createError } = require("../utils/errorManager");
 
 const dummyBuckets = [
   {
@@ -48,12 +49,36 @@ exports.createNewBucket = async (req, res, next) => {
 };
 
 exports.getBucketById = async (req, res, next) => {
-  const bucketId = req.params.bucketId;
-
   try {
+    const bucketId = req.params.bucketId;
+
     const dbBucket = await getBucketById(bucketId);
     return res.status(200).json({
       data: dbBucket,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteBucket = async (req, res, next) => {
+  try {
+    const bucketId = req.params.bucketId;
+    const result = await Bucket.updateOne(
+      {
+        bucketShortId: bucketId,
+      },
+      {
+        $set: {
+          expiresAfter: 0,
+        },
+      }
+    );
+    if (result.matchedCount === 0)
+      createError(404, "Bucket with given shortId doesn't exist.");
+
+    return res.status(200).json({
+      message: `Bucket ${bucketId} deleted succesfully.`,
     });
   } catch (err) {
     next(err);
