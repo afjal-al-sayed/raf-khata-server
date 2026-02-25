@@ -1,29 +1,14 @@
 const Bucket = require("../models/bucketModel");
 const { getBucketById } = require("../services/bucketService");
+const { createNewText } = require("../services/textService");
 const { createError } = require("../utils/errorManager");
-const { generateNewShortId } = require("../utils/uniqueIdHandler");
 
 exports.addNewText = async (req, res, next) => {
   try {
     const bucketId = req.params.bucketId;
-    const textContent = req.body?.text?.trim();
-    if (!textContent) createError(400, "Text content cannot be empty.");
 
-    const dbBucket = await getBucketById(bucketId);
+    const newText = await createNewText(req, bucketId);
 
-    let newTextShortId;
-    while (true) {
-      newTextShortId = generateNewShortId();
-      const alreadyHasThisShortId = dbBucket.textList.find(
-        (text) => text.textShortId === newTextShortId
-      );
-      if (!alreadyHasThisShortId) break;
-    }
-
-    const newText = {
-      text: textContent,
-      textShortId: newTextShortId,
-    };
     await Bucket.updateOne(
       { bucketShortId: bucketId },
       { $push: { textList: newText } }
@@ -42,9 +27,7 @@ exports.addNewText = async (req, res, next) => {
 exports.updateText = async (req, res, next) => {
   try {
     const { bucketId, textId } = req.params;
-    const textContent = req.body?.text?.trim();
-    if (!textContent) createError(400, "Text content cannot be empty.");
-
+    const { text } = req.requiredBodyParams; // already purified by middleware
     await getBucketById(bucketId); // for checking if bucket exists and also the bucket is not expired.
 
     const result = await Bucket.updateOne(
@@ -54,7 +37,7 @@ exports.updateText = async (req, res, next) => {
       },
       {
         $set: {
-          "textList.$.text": textContent,
+          "textList.$.text": text,
         },
       }
     );
