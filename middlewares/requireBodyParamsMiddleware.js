@@ -4,7 +4,7 @@ exports.requireBodyParams = (requiredParams) => {
     const values = {};
 
     for (const param of requiredParams) {
-      const value = req.body?.[param]?.trim();
+      const value = req.body?.[param]?.trim(); // trim should be only used in stirng
 
       if (value === undefined || value === null || value === "") {
         missing.push(param);
@@ -18,7 +18,7 @@ exports.requireBodyParams = (requiredParams) => {
 
     req.requiredBodyParams = values;
 
-    console.log(req.requiredBodyParams);
+    //console.log(req.requiredBodyParams);
 
     next();
   };

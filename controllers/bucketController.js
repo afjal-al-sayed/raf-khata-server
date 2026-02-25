@@ -1,5 +1,6 @@
 const Bucket = require("../models/bucketModel");
 const { getBucketById } = require("../services/bucketService");
+const { createNewText } = require("../services/textService");
 
 const dummyBuckets = [
   {
@@ -34,7 +35,10 @@ exports.getAllBuckets = (req, res) => {
 
 exports.createNewBucket = async (req, res, next) => {
   try {
-    const newBucket = await Bucket.create({});
+    const newText = await createNewText(req);
+    const newBucket = await Bucket.create({
+      textList: [newText],
+    });
     return res.status(201).json({
       data: newBucket,
     });
