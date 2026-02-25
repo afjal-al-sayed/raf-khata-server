@@ -67,6 +67,7 @@ exports.deleteBucket = async (req, res, next) => {
     const result = await Bucket.updateOne(
       {
         bucketShortId: bucketId,
+        expiresAfter: { $ne: 0 },
       },
       {
         $set: {
