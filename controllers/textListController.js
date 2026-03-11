@@ -7,7 +7,7 @@ exports.addNewText = async (req, res, next) => {
   try {
     const bucketId = req.params.bucketId;
 
-    const newText = await createNewText(req, bucketId);
+    const newText = await createNewText(req, bucketId); // this returns a array either with one or multiple text.
 
     await Bucket.updateOne(
       { bucketShortId: bucketId },

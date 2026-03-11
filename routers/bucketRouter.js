@@ -13,7 +13,8 @@ const textListRouter = require("./textListRouter.js");
 router.use("/:bucketId/textList", textListRouter);
 
 //router.get("/", getAllBuckets);
-router.post("/", requireBodyParams(["text"]), createNewBucket);
+// New Bucket -> must add a middleware to check is "textList" exists with each one having a "text"
+router.post("/", createNewBucket);
 router.get("/:bucketId", getBucketById);
 router.delete("/delete/:bucketId", deleteBucket);
 

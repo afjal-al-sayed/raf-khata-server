@@ -5,7 +5,7 @@ const {
 } = require("../middlewares/requireBodyParamsMiddleware");
 const router = express.Router({ mergeParams: true });
 
-router.post("/", requireBodyParams(["text"]), addNewText);
+router.post("/", addNewText);
 router.patch("/:textId", requireBodyParams(["text"]), updateText);
 
 module.exports = router;

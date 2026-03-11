@@ -3,30 +3,23 @@ const { getBucketById } = require("../services/bucketService");
 const { createError } = require("../utils/errorManager");
 
 exports.createNewText = async (req, bucketId) => {
-  const { text } = req.requiredBodyParams;
-  let newTextShortId = generateNewShortId();
-  // this is when a text need to be created before creating a bucket.
-  if (!bucketId) {
-    return {
-      text: text,
-      textShortId: newTextShortId,
-    };
-  }
+  const { textList } = req.body;
+  // this is when a textList need to be created before creating a bucket.
+  if (!bucketId) return generateTextListWithUniqueIds(textList);
 
   const dbBucket = await getBucketById(bucketId);
 
-  while (true) {
-    const alreadyHasThisShortId = dbBucket.textList.find(
-      (text) => text.textShortId === newTextShortId
-    );
-    if (!alreadyHasThisShortId) break;
-    newTextShortId = generateNewShortId();
-  }
+  const reservedIds = dbBucket.textList.map((item) => item.textShortId);
 
-  const newText = {
-    text: text,
-    textShortId: newTextShortId,
-  };
+  return generateTextListWithUniqueIds(textList, reservedIds);
+};
 
-  return newText;
+const generateTextListWithUniqueIds = (textList, reservedIds = []) => {
+  console.log(generateNewShortId(reservedIds));
+  const textListWithUniqueIds = textList.map((item) => ({
+    text: item.text, // first one which is saved to DB, item. one which is passed from the frontend
+    title: item.title,
+    textShortId: generateNewShortId(reservedIds),
+  }));
+  return textListWithUniqueIds;
 };

@@ -36,9 +36,9 @@ exports.getAllBuckets = (req, res) => {
 
 exports.createNewBucket = async (req, res, next) => {
   try {
-    const newText = await createNewText(req);
+    const newText = await createNewText(req); // this alreaday returns as a list
     const newBucket = await Bucket.create({
-      textList: [newText],
+      textList: newText,
     });
     return res.status(201).json({
       data: newBucket,
