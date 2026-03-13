@@ -9,9 +9,12 @@ exports.getBucketById = async (bucketId) => {
     // no bucket with this id;
     createError(404, "Bucket Not Found.");
   }
-  if (dbBucket.isExpired()) {
-    createError(404, "Bucket is Expired.");
-  }
+
+  // no bucket expiry currenty
+  // if (dbBucket.isExpired()) {
+  //   createError(404, "Bucket is Expired.");
+  // }
+
   //console.log(dbBucket);
   //   is valid is basically returing matching array
   //return dbBucket && dbBucket.length > 0 ? dbBucket[0] : null;
