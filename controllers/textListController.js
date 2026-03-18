@@ -1,17 +1,17 @@
 const Bucket = require("../models/bucketModel");
 const { getBucketById } = require("../services/bucketService");
-const { createNewText } = require("../services/textService");
+const { createTextList } = require("../services/textService");
 const { createError } = require("../utils/errorManager");
 
 exports.addNewText = async (req, res, next) => {
   try {
     const bucketId = req.params.bucketId;
 
-    const newText = await createNewText(req, bucketId); // this returns a array either with one or multiple text.
+    const textList = await createTextList(req, bucketId); // this returns a array either with one or multiple text.
 
     await Bucket.updateOne(
       { bucketShortId: bucketId },
-      { $push: { textList: newText } }
+      { $push: { textList: textList } }
     );
 
     const updatedBucket = await getBucketById(bucketId);

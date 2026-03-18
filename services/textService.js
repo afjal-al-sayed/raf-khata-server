@@ -2,14 +2,14 @@ const { generateNewShortId } = require("../utils/uniqueIdHandler");
 const { getBucketById } = require("../services/bucketService");
 const { createError } = require("../utils/errorManager");
 
-exports.createNewText = async (req, bucketId) => {
-  const { textList } = req.body;
+exports.createTextList = async (req, bucketId) => {
+  const textList = req.body?.textList || [];
   // this is when a textList need to be created before creating a bucket.
   if (!bucketId) return generateTextListWithUniqueIds(textList);
 
   const dbBucket = await getBucketById(bucketId);
 
-  const reservedIds = dbBucket.textList.map((item) => item.textShortId);
+  const reservedIds = dbBucket.textList?.map((item) => item.textShortId) || [];
 
   return generateTextListWithUniqueIds(textList, reservedIds);
 };
