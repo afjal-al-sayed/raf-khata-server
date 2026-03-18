@@ -5,6 +5,7 @@ const {
   errorHandlerMiddleware,
 } = require("./middlewares/errorHandlerMiddleware.js");
 const bucketRouter = require("./routers/bucketRouter.js");
+const filesRouter = require("./routers/filesRouter.js");
 const {
   sessionHandlerMiddleware,
 } = require("./middlewares/sessionHandlerMiddleware.js");
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use(sessionHandlerMiddleware);
 
 app.use("/api/buckets", bucketRouter);
+app.use("/api/files", filesRouter);
 
 app.use(errorHandlerMiddleware);
 

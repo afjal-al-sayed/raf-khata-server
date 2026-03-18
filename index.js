@@ -6,7 +6,7 @@ const connectDatabase = require("./config/db.js");
 const app = require("./app.js");
 
 async function startServer() {
-  await connectDatabase(MONGO_DB_URI);
+  //await connectDatabase(MONGO_DB_URI);
   app.listen(PORT, () => {
     console.log("server started.....");
   });
