@@ -1,5 +1,8 @@
 const express = require("express");
-const { generateUploadUrl } = require("../controllers/filesController");
+const {
+  generateUploadUrl,
+  generateDownloadUrl,
+} = require("../controllers/filesController");
 const {
   requireBodyParams,
 } = require("../middlewares/requireBodyParamsMiddleware");
@@ -9,6 +12,12 @@ router.post(
   "/generate-upload-url",
   requireBodyParams(["fileName"]),
   generateUploadUrl
+);
+
+router.post(
+  "/generate-download-url",
+  requireBodyParams(["filePath"]),
+  generateDownloadUrl
 );
 
 module.exports = router;

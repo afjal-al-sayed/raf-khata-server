@@ -17,6 +17,18 @@ exports.generateSignedUploadUrl = async (fileName) => {
   return {
     uploadUrl: data.signedUrl,
     path: filePath,
-    publicUrl: `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_BUCKET_NAME}/${filePath}`,
   };
+};
+
+exports.generateSignedDownloadUrl = async (filePath, expiresIn = 300) => {
+  const { data, error } = await supabase.storage
+    .from(SUPABASE_BUCKET_NAME)
+    .createSignedUrl(filePath, expiresIn);
+
+  if (error) {
+    console.error(error);
+    createError(404, "Unable to generate download URL.");
+  }
+
+  return data.signedUrl;
 };
