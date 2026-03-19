@@ -21,6 +21,32 @@ const textSchema = new mongoose.Schema(
   }
 );
 
+const fileSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "File must have a name along with extension."],
+      trim: true,
+    },
+    path: {
+      type: String,
+      required: true,
+    },
+    size: {
+      type: Number,
+      required: true,
+    },
+    fileShortId: {
+      type: String,
+      required: true,
+      default: () => generateNewShortId(),
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const bucketSchema = new mongoose.Schema(
   {
     bucketShortId: {
@@ -37,6 +63,7 @@ const bucketSchema = new mongoose.Schema(
       requried: true, // 6 hrs
     },
     textList: [textSchema],
+    fileList: [fileSchema],
   },
   {
     timestamps: true,

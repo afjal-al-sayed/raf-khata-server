@@ -1,6 +1,7 @@
 const Bucket = require("../models/bucketModel");
 const { getBucketById } = require("../services/bucketService");
-const { createNewText } = require("../services/textService");
+const { createFileList } = require("../services/filesService");
+const { createTextList } = require("../services/textService");
 const { createError } = require("../utils/errorManager");
 
 const dummyBuckets = [
@@ -36,9 +37,11 @@ exports.getAllBuckets = (req, res) => {
 
 exports.createNewBucket = async (req, res, next) => {
   try {
-    const newText = await createNewText(req); // this alreaday returns as a list
+    const textList = await createTextList(req); // this alreaday returns as a list
+    const fileList = await createFileList(req);
     const newBucket = await Bucket.create({
-      textList: newText,
+      textList: textList,
+      fileList: fileList,
     });
     return res.status(201).json({
       data: newBucket,
